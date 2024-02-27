@@ -95,16 +95,15 @@ app.get("/", (c) =>
 );
 
 app.post("/res", async (c) => {
-  let frameData;
+  // Initial fetch and assignment of frameData, no need to re-fetch or reassign.
+  const frameData: { untrustedData: FrameDataRes; trustedData: any } = await c.req.json();
 
   try {
-    frameData = await c.req.json();
     console.log('Received frame data:', frameData);
 
     if (typeof frameData?.untrustedData?.buttonIndex === 'undefined') {
       throw new HTTPException(400, { message: "Button index is missing" });
     }
-
   const { buttonIndex } = frameData.untrustedData;
 
   switch (buttonIndex) {
@@ -126,10 +125,19 @@ app.post("/res", async (c) => {
       return c.render(<Layout imgUrl="https://i.imgur.com/sS717ci.jpg" />);
     }
   }
-} catch (error) {
-  console.error('Error processing request:', error);
-  return c.json({ error: error.message }, 400);
+} 
+
+catch (error) {
+  let errorMessage: string;
+  if (error instanceof Error) {
+    errorMessage = error.message;
+  } else {
+    errorMessage = 'Unknown error occurred';
+  }
+  console.error('Error processing request:', errorMessage);
+  return c.json({ error: errorMessage }, 400);
 }
+
 });
 
 console.log("sever is running");
