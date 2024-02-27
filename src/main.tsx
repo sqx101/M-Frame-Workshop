@@ -95,13 +95,15 @@ app.get("/", (c) =>
 );
 
 app.post("/res", async (c) => {
-  const frameData: { untrustedData: FrameDataRes } = await c.req.json();
+  let frameData;
 
-  console.log(frameData);
+  try {
+    frameData = await c.req.json();
+    console.log('Received frame data:', frameData);
 
-  if (!frameData?.untrustedData?.buttonIndex) {
-    throw new HTTPException(400, { message: "frame data missing" });
-  }
+    if (typeof frameData?.untrustedData?.buttonIndex === 'undefined') {
+      throw new HTTPException(400, { message: "Button index is missing" });
+    }
 
   const { buttonIndex } = frameData.untrustedData;
 
@@ -124,6 +126,10 @@ app.post("/res", async (c) => {
       return c.render(<Layout imgUrl="https://i.imgur.com/sS717ci.jpg" />);
     }
   }
+} catch (error) {
+  console.error('Error processing request:', error);
+  return c.json({ error: error.message }, 400);
+}
 });
 
 console.log("sever is running");
