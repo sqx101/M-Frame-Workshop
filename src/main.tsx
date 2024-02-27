@@ -77,7 +77,7 @@ const Layout = ({
         <meta property="fc:frame:image" content={`${imgUrl}`} />
         <meta
           property="fc:frame:post_url"
-          content={postUrl || "m-frame-workshop-production.up.railway.app/res"}
+          content={postUrl || "https://m-frame-workshop-production.up.railway.app/res"}
         />
         {<ButtonRenderer buttonData={buttonData || defaultButtonData} />}
       </head>
@@ -89,7 +89,7 @@ app.get("/", (c) =>
   c.render(
     <Layout
       imgUrl="https://i.imgur.com/sS717ci.jpg"
-      postUrl="m-frame-workshop-production.up.railway.app/res"
+      postUrl="https://m-frame-workshop-production.up.railway.app/res"
     />,
   ),
 );
