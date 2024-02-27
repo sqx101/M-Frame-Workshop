@@ -67,7 +67,7 @@ const Layout = ({
   postUrl?: string;
   buttonData?: string[];
 }) => {
-  const defaultButtonData = ["Btn 5", "Btn 2", "Btn 3", "Btn 4"];
+  const defaultButtonData = ["Btn 1", "Btn 2", "Btn 3", "Btn 4"];
   return (
     <html>
       <head>
@@ -95,15 +95,14 @@ app.get("/", (c) =>
 );
 
 app.post("/res", async (c) => {
-  // Initial fetch and assignment of frameData, no need to re-fetch or reassign.
-  const frameData: { untrustedData: FrameDataRes; trustedData: any } = await c.req.json();
+  const frameData: { untrustedData: FrameDataRes } = await c.req.json();
 
-  try {
-    console.log('Received frame data:', frameData);
+  console.log(frameData);
 
-    if (typeof frameData?.untrustedData?.buttonIndex === 'undefined') {
-      throw new HTTPException(400, { message: "Button index is missing" });
-    }
+  if (!frameData?.untrustedData?.buttonIndex) {
+    throw new HTTPException(400, { message: "frame data missing" });
+  }
+
   const { buttonIndex } = frameData.untrustedData;
 
   switch (buttonIndex) {
@@ -125,19 +124,6 @@ app.post("/res", async (c) => {
       return c.render(<Layout imgUrl="https://i.imgur.com/sS717ci.jpg" />);
     }
   }
-} 
-
-catch (error) {
-  let errorMessage: string;
-  if (error instanceof Error) {
-    errorMessage = error.message;
-  } else {
-    errorMessage = 'Unknown error occurred';
-  }
-  console.error('Error processing request:', errorMessage);
-  return c.json({ error: errorMessage }, 400);
-}
-
 });
 
 console.log("sever is running");
