@@ -67,7 +67,7 @@ const Layout = ({
   postUrl?: string;
   buttonData?: string[];
 }) => {
-  const defaultButtonData = ["Btn 1", "Btn 2", "Btn 3", "Btn 4"];
+  const defaultButtonData = ["Btn 4", "Btn 5", "Btn 6", "Btn 7"];
   return (
     <html>
       <head>
